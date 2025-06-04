@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+:root {
+  font-family: "Montserrat", sans-serif;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #ffffff;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  padding: 0 clamp(20px, 6vw, 70px);
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: clamp(35px, 6vw, 70px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: black;
+}
+
+h2 {
+  font-size: clamp(24px, 4vw, 40px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: black;
+}
+
+h3 {
+  font-size: clamp(16px, 1.5vw, 24px);
+  font-weight: 700;
+  color: black;
+}
+
+p {
+  color: black;
+  font-size: clamp(14px, 1.5vw, 16px);
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: justify;
+}
+
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border-radius: 100px;
+  border: 1px solid #d0d0d0;
+  padding: 1em 1.5em;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+button:hover {
+  background-color: #a20009;
+  color: white;
+}
+button:focus,
+button:focus-visible {
+  background-color: #a20009;
+  color: white;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
