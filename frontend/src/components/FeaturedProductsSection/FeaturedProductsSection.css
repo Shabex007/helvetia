@@ -1,0 +1,23 @@
+.featured-products {
+  padding: 40px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: center;
+}
+
+.featured-products-top-bar {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+  max-width: 1300px;
+}
+
+@media (max-width: 768px) {
+  .featured-products-top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+}

@@ -1,0 +1,226 @@
+/* ---------- Header ---------- */
+.header {
+  width: 100%;
+  padding: 30px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+.nav-top {
+  position: relative;
+  height: 44px;
+  width: 100%;
+  max-width: 1300px;
+}
+
+.menu-btn {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.logo {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  transform: translateX(-50%);
+  height: 24px;
+  /* adjust as per your design */
+}
+
+.nav-btn-wrapper {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  /* was missing or implied wrong */
+  gap: 14px;
+}
+
+.nav-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 100px;
+  border: 1px solid #d0d0d0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+}
+
+.nav-icon {
+  height: 18px;
+}
+
+.menu {
+  height: 15px;
+}
+
+.nav-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 1300px;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  background: #f0f0f0;
+  padding: 20px 24px;
+  border-radius: 14px;
+  border: none;
+  font-weight: 500;
+  font-size: 14px;
+  color: black;
+  line-height: 14px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Add this to .nav-link */
+.nav-link {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.selected {
+  background: #a20009;
+  color: white;
+}
+
+/* Add this to .icon-btn */
+.nav-btn {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+  background-color: #a20009;
+  color: white;
+}
+
+.nav-btn:hover .nav-icon {
+  filter: brightness(0) invert(1);
+}
+
+.nav-btn:hover .menu {
+  filter: brightness(0) invert(1);
+}
+
+.nav-btn:hover .nav-btn-counter {
+  background-color: white;
+  border: solid 1px #d0d0d0;
+  color: black;
+}
+
+.nav-btn-counter {
+  position: absolute;
+  top: -7px;
+  left: 28px;
+  background: #a20009;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+  min-width: 20px;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+@media (max-width: 744px) {
+  /* Keep nav-links horizontal */
+  .nav-bottom {
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 0;
+    row-gap: 10px;
+    justify-content: space-between;
+  }
+
+  .nav-link {
+    flex: 0 0 auto; /* Prevent stretching to full width */
+    min-width: max-content;
+  }
+}
+
+@media (max-width: 600px) {
+  .logo {
+    position: absolute;
+    left: 35%;
+    top: 10px;
+    transform: translateX(-50%);
+    height: 24px;
+    /* adjust as per your design */
+  }
+}
+
+/* ---------- Search Bar ---------- */
+
+.search-bar-wrapper {
+  flex: 1; /* Takes all available space */
+  min-width: 150px;
+  max-width: 100%;
+}
+
+.search-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  background: #f0f0f0;
+  border-radius: 14px;
+  border: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.search-container:hover,
+.search-container:focus-within {
+  background: white;
+  border-color: #000000;
+  /* Highlight border on hover/focus */
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+  /* Optional glow */
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 18px;
+  color: black;
+  flex: 1;
+  width: 100%;
+}
+
+.search-icon {
+  height: 16px;
+}
+
+::placeholder {
+  color: black;
+}
+
+@media (max-width: 744px) {
+  .search-bar-wrapper {
+    order: -1;
+    width: 100%;
+    min-width: 100%;
+    margin-bottom: 10px; /* spacing below search */
+  }
+}

@@ -1,0 +1,107 @@
+/* ---------- PRODUCT GRID ---------- */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(20px, 2vw, 32px);
+  width: 100%;
+  max-width: 1300px;
+  box-sizing: border-box;
+}
+
+/* ---------- PRODUCT CARD ---------- */
+.product-card {
+  background: #f3f3f3;
+  border-radius: 24px;
+  padding: clamp(16px, 2vw, 20px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.product-header {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.product-brand {
+  font-size: 14px;
+  color: #a20009;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+}
+
+.product-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-model {
+  font-family: "Montserrat", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: black;
+}
+
+.product-price {
+  font-size: 18px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  color: black;
+}
+
+.product-image {
+  width: 212px;
+  height: 304px;
+  object-fit: contain;
+}
+
+.product-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+
+.wishlist-btn,
+.bag-btn {
+  border-radius: 99px;
+  background: white;
+  outline: 1px solid #d0d0d0;
+  border: none;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.wishlist-btn {
+  padding: 16px;
+}
+
+.bag-btn {
+  padding: 14px;
+  gap: 10px;
+}
+
+@media (max-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .product-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
