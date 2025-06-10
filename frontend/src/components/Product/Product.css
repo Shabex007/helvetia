@@ -28,10 +28,7 @@
 }
 
 .product-brand {
-  font-size: 14px;
   color: #a20009;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 700;
 }
 
 .product-row {
@@ -41,19 +38,15 @@
 }
 
 .product-model {
-  font-family: "Montserrat", sans-serif;
-  font-size: 18px;
-  font-weight: 700;
   text-transform: uppercase;
-  color: black;
 }
 
-.product-price {
+/* .product-price {
   font-size: 18px;
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
   color: black;
-}
+} */
 
 .product-image {
   width: 212px;
@@ -87,6 +80,19 @@
 
 .wishlist-btn {
   padding: 16px;
+}
+.wishlist-btn:hover {
+  background-color: #a20009;
+  color: white;
+}
+.wishlist-btn :focus,
+.wishlist-btn :focus-visible {
+  background-color: #a20009;
+  color: white;
+}
+
+button:hover .button-icon {
+  filter: brightness(0) invert(1);
 }
 
 .bag-btn {

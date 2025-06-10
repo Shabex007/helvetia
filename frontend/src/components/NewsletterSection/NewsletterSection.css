@@ -1,11 +1,11 @@
 .newsletter-section {
   padding: 0px 0;
-  background-image: url("../../assets/newsbg.jpg");
+  background-image: url("../../assets/newsbg.jpeg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   width: 100%;
-  max-width: 1440px;
+  max-width: 1300px;
   min-height: 650px;
   margin: 0 auto;
   overflow: hidden;

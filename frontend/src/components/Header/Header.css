@@ -22,7 +22,7 @@
   top: 0;
 }
 
-.logo {
+.helvetia-logo {
   position: absolute;
   left: 50%;
   top: 10px;
@@ -95,7 +95,6 @@
   background: #a20009;
   color: white;
 }
-
 /* Add this to .icon-btn */
 .nav-btn {
   cursor: pointer;
@@ -156,7 +155,7 @@
 }
 
 @media (max-width: 600px) {
-  .logo {
+  .helvetia-logo {
     position: absolute;
     left: 35%;
     top: 10px;
