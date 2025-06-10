@@ -1,13 +1,10 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { useShop } from "../context/ShopContext";
-import BagDisplay from "../components/Bag/BagDisplay";
-import BagSummary from "../components/Bag/BagSummary";
-import "./styles/Bag.css";
+import BagDisplay from "../components/BagSection/BagDisplay";
+import BagSummary from "../components/BagSection/BagSummary";
 
 const Bag = () => {
   return (
-    <div className="bag-content">
+    <div className="w-full flex flex-col lg:flex-row gap-[60px] py-[70px] px-4 box-border">
       <BagDisplay />
       <BagSummary />
     </div>

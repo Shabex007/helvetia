@@ -1,9 +1,11 @@
 import React from "react";
-import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { useShop } from "../../context/ShopContext";
 
 import SearchBar from "./SearchBar";
+import IconButton from "../UI/IconButton";
+import NavLink from "../UI/NavLink";
+
 import logo from "../../assets/logo.svg";
 import bag from "../../assets/bag.svg";
 import menuicon from "../../assets/menu.svg";
@@ -16,60 +18,51 @@ const Header = () => {
   const totalItems = bagItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <header className="header">
+    <header className="w-full py-[30px] flex flex-col gap-6 box-border items-center">
       {/* Top section */}
-      <nav className="nav-top">
-        <button className="nav-btn menu-btn">
-          <img src={menuicon} alt="menu" className="menu" />
-        </button>
+      <nav className="relative h-11 w-full max-w-[1300px]">
+        <IconButton
+          icon={menuicon}
+          alt="menu"
+          onClick={() => {}}
+          className="absolute left-0 top-0"
+          iconClassName="h-[15px]"
+        />
 
         <img
           src={logo}
           alt="helvetia-logo"
-          className="helvetia-logo"
+          className="absolute top-[10px] left-1/2 transform -translate-x-1/2 h-6 cursor-pointer"
           onClick={() => navigate("/")}
         />
 
-        <div className="nav-btn-wrapper ">
-          <button
-            className="nav-btn"
-            style={{ position: "relative" }}
+        <div className="absolute right-0 top-0 flex gap-[14px]">
+          <IconButton
+            icon={wishlist}
+            alt="wishlist"
             onClick={() => navigate("/wishlist")}
-          >
-            <img src={wishlist} alt="wishlist" className="nav-icon" />
-            <div className="nav-btn-counter">{wishlistItems.length}</div>
-          </button>
-
-          <button
-            className="nav-btn"
-            style={{ position: "relative" }}
+            counter={wishlistItems.length}
+          />
+          <IconButton
+            icon={bag}
+            alt="cart"
             onClick={() => navigate("/bag")}
-          >
-            <img src={bag} alt="cart" className="nav-icon" />
-            <div className="nav-btn-counter">{totalItems}</div>
-          </button>
-          <button className="nav-btn">
-            <img src={user} alt="user" className="nav-icon" />
-          </button>
+            counter={totalItems}
+          />
+          <IconButton icon={user} alt="user" onClick={() => {}} />
         </div>
       </nav>
 
-      <nav className="nav-bottom">
-        <button className="nav-link" onClick={() => navigate("/about")}>
-          About
-        </button>
-        <button className="nav-link" onClick={() => navigate("/faq")}>
-          FAQ’s
-        </button>
-        <button className="nav-link" onClick={() => navigate("/terms")}>
-          T&C's
-        </button>
-        <div className="search-bar-wrapper">
+      {/* Bottom navigation */}
+      <nav className="flex items-center justify-center gap-[14px] w-full max-w-[1300px] flex-wrap sm:flex-row sm:flex-wrap sm:justify-between sm:gap-y-[10px]">
+        <div className="flex-1 min-w-[150px] max-w-full ">
           <SearchBar />
         </div>
-        <button className="nav-link" onClick={() => navigate("/watches")}>
-          Watches
-        </button>
+        <NavLink onClick={() => navigate("/about")}>About</NavLink>
+        <NavLink onClick={() => navigate("/faq")}>FAQ's</NavLink>
+        <NavLink onClick={() => navigate("/terms")}>T&C's</NavLink>
+
+        <NavLink onClick={() => navigate("/watches")}>Watches</NavLink>
       </nav>
     </header>
   );

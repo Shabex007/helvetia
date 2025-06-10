@@ -1,10 +1,9 @@
 import React from "react";
 import WishlistGrid from "../components/Wishlist/WishlistGrid";
-import "./styles/Wishlist.css";
 
 const Wishlist = () => {
   return (
-    <div className="bag-item-section">
+    <div className="w-full flex flex-col justify-start items-center gap-[40px] py-[40px]">
       <WishlistGrid />
     </div>
   );

@@ -1,25 +1,19 @@
-// src/components/ProductDetails.jsx
 import React, { useState } from "react";
 import { useShop } from "../../context/ShopContext";
 import { useNavigate } from "react-router-dom";
-import "./ProductDetails.css";
+
 import wishlist from "../../assets/wishlist.svg";
 import bag from "../../assets/bag.svg";
 import deliveryTruck from "../../assets/icon-delivery.svg";
 import returnIcon from "../../assets/icon-return.svg";
-import upIcon from "../../assets/up.svg"; // Use your actual icon path
+import upIcon from "../../assets/up.svg";
 import downIcon from "../../assets/down.svg";
-import Button from "../Button/Button";
+
+import Button from "../UI/Button";
 
 const ProductDetails = ({ product }) => {
   const { brand, model, price, images, description } = product;
   const { addToBag, addToWishlist } = useShop();
-
-  const handleAddToBag = () => {
-    addToBag({ ...product, image: product.images[0] }, quantity);
-    navigate("/bag");
-  };
-
   const navigate = useNavigate();
 
   const [mainImage, setMainImage] = useState(images[0]);
@@ -28,78 +22,84 @@ const ProductDetails = ({ product }) => {
   const handleDecrease = () => setQuantity((q) => (q > 1 ? q - 1 : 1));
   const handleIncrease = () => setQuantity((q) => q + 1);
 
+  const handleAddToBag = () => {
+    addToBag({ ...product, image: product.images[0] }, quantity);
+    navigate("/bag");
+  };
+
   return (
-    <section className="product-container">
-      {/* LEFT SIDE: Images */}
-      <div className="product-gallery">
-        <div className="thumbnail-list">
+    <section className="flex flex-col lg:flex-row gap-[70px] px-4 py-[70px] box-border">
+      {/* LEFT: Image Gallery */}
+      <div className="flex gap-[30px] flex-wrap">
+        <div className="flex flex-col gap-4">
           {images.map((img, i) => (
-            <div className="thumbnail" key={i}>
+            <div
+              key={i}
+              className={`w-[170px] h-[140px] bg-[#f5f5f5] flex justify-center items-center p-2 rounded-lg outline-1 outline-[#d0d0d0] cursor-pointer`}
+              onClick={() => setMainImage(img)}
+            >
               <img
                 src={img}
                 alt={`Thumbnail ${i + 1}`}
-                onClick={() => setMainImage(img)}
-                className={mainImage === img ? "active-thumb" : ""}
+                className={`h-full transition-opacity ${
+                  mainImage === img ? "opacity-100" : "opacity-60"
+                }`}
               />
             </div>
           ))}
         </div>
-        <div className="main-image">
-          <img src={mainImage} alt={model} />
+        <div className="w-[500px] h-[608px] bg-[#f5f5f5] p-10 rounded-lg outline-1 outline-[#d0d0d0] flex items-center justify-center">
+          <img src={mainImage} alt={model} className="h-full object-contain" />
         </div>
       </div>
 
-      {/* RIGHT SIDE: Info */}
-      <div className="product-info">
-        <div className="product-meta">
-          <h5 className="brand">{brand}</h5>
-          <h2 className="title">{model}</h2>
-          <h4 className="price">${price.toLocaleString()}</h4>
+      {/* RIGHT: Product Info */}
+      <div className="flex flex-col max-w-[400px] gap-6">
+        <div className="flex flex-col gap-2">
+          <h5 className="text-[#a20009] font-semibold">{brand}</h5>
+          <h2 className="text-2xl font-bold">{model}</h2>
+          <h4 className="text-[#aaa] font-semibold">
+            ${price.toLocaleString()}
+          </h4>
         </div>
 
-        <p className="description">{description}</p>
-        <hr className="divider" />
+        <p className="text-sm text-medium">{description}</p>
+        <hr className="h-[2px] bg-black/30 border-none" />
 
-        {/* Quantity & Action Buttons */}
-        <div className="actions">
-          <div className="product-quantity">
-            <span className="quantity-value">{quantity}</span>
-            <div className="quantity-button">
+        {/* Quantity & Actions */}
+        <div className="flex flex-row gap-4">
+          <div className="flex w-fit items-center gap-4 border border-black/40 rounded px-3 py-1.5">
+            <span className="text-black text-base font-medium text-center">
+              {quantity}
+            </span>
+            <div className="flex flex-col items-center justify-center gap-[2px]">
               <img
                 src={upIcon}
                 alt="Increase"
-                className="increase"
+                className="w-4 h-4 cursor-pointer"
                 onClick={handleIncrease}
-                style={{ cursor: "pointer" }}
               />
               <img
                 src={downIcon}
                 alt="Decrease"
-                className="decrease"
+                className="w-4 h-4 cursor-pointer"
                 onClick={handleDecrease}
-                style={{ cursor: "pointer" }}
               />
             </div>
           </div>
 
-          <div className="product-actions">
+          <div className="flex gap-3 justify-start">
+            <button
+              onClick={() => addToWishlist({ id, brand, model, price, image })}
+              className="p-4 w-[52px] rounded-full bg-white outline-1 outline-[#d0d0d0] cursor-pointer hover:bg-[#a20009] hover:text-white transition flex items-center justify-center"
+            >
+              <img
+                src={wishlist}
+                alt="wishlist"
+                className="h-[14px] hover:filter hover:invert hover:brightness-0"
+              />
+            </button>
             <Button
-              className="wishlist-btn"
-              text={null}
-              iconRight={wishlist}
-              onClick={() =>
-                addToWishlist({
-                  id: product.id,
-                  brand,
-                  model,
-                  price,
-                  image: product.images[0],
-                })
-              }
-            />
-
-            <Button
-              className="bag-btn"
               text="Add to Bag"
               iconRight={bag}
               onClick={handleAddToBag}
@@ -107,21 +107,21 @@ const ProductDetails = ({ product }) => {
           </div>
         </div>
 
-        {/* Delivery Info */}
-        <div className="product-support">
-          <div className="product-support-item">
-            <img src={deliveryTruck} className="product-support-icon truck" />
-            <div className="product-support-text">
-              <h6 className="label">Free Delivery</h6>
-              <p className="subtext">Free Delivery on all orders</p>
+        {/* Support Info */}
+        <div className="flex flex-col gap-4 border-[2px] border-black/30 rounded px-6 py-5">
+          <div className="flex items-center gap-4">
+            <img src={deliveryTruck} className="w-10 h-10" />
+            <div>
+              <h6 className="text-base font-semibold">Free Delivery</h6>
+              <p className="text-xs font-medium">Free Delivery on all orders</p>
             </div>
           </div>
-          <hr className="divider" />
-          <div className="product-support-item">
-            <img src={returnIcon} className="product-support-icon return" />
-            <div className="product-support-text">
-              <h6 className="label">Return Delivery</h6>
-              <p className="subtext">
+          <hr className="h-[2px] bg-black/30 border-none" />
+          <div className="flex items-center gap-4">
+            <img src={returnIcon} className="w-10 h-10" />
+            <div>
+              <h6 className="text-base font-semibold">Return Delivery</h6>
+              <p className="text-xs font-medium">
                 Free 30 Days Delivery Returns.{" "}
                 <span className="underline">Details</span>
               </p>

@@ -1,6 +1,5 @@
 import React from "react";
-import SupportCard from "./SupportCard";
-import "./SupportSection.css";
+import SupportCard from "../UI/SupportCard";
 
 import shippingIcon from "../../assets/shipping.svg";
 import serviceIcon from "../../assets/service.svg";
@@ -26,9 +25,11 @@ const supportItems = [
 
 const SupportSection = () => {
   return (
-    <section className="support-section">
-      <h2>WE ARE SUPPORTED BY</h2>
-      <div className="support-grid">
+    <section className="py-[50px] flex flex-col items-center gap-[50px] box-border">
+      <h2 className="text-[clamp(28px,4vw,40px)] font-bold text-center">
+        WE ARE SUPPORTED BY
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-[clamp(20px,2vw,40px)] w-full max-w-[1300px]">
         {supportItems.map((item, index) => (
           <SupportCard
             key={index}
