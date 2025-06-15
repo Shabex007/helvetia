@@ -2,13 +2,13 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useShop } from "../../context/ShopContext";
 
-import SearchBar from "./SearchBar";
+import SearchBar from "../UI/SearchBar";
 import IconButton from "../UI/IconButton";
 import NavLink from "../UI/NavLink";
+import HamburgerMenu from "./HamburgerMenu/HamburgerMenu";
 
 import logo from "../../assets/logo.svg";
 import bag from "../../assets/bag.svg";
-import menuicon from "../../assets/menu.svg";
 import user from "../../assets/user.svg";
 import wishlist from "../../assets/wishlist.svg";
 
@@ -21,13 +21,7 @@ const Header = () => {
     <header className="w-full py-[30px] flex flex-col gap-6 box-border items-center">
       {/* Top section */}
       <nav className="relative h-11 w-full max-w-[1300px]">
-        <IconButton
-          icon={menuicon}
-          alt="menu"
-          onClick={() => {}}
-          className="absolute left-0 top-0"
-          iconClassName="h-[15px]"
-        />
+        <HamburgerMenu />
 
         <img
           src={logo}
@@ -49,7 +43,11 @@ const Header = () => {
             onClick={() => navigate("/bag")}
             counter={totalItems}
           />
-          <IconButton icon={user} alt="user" onClick={() => {}} />
+          <IconButton
+            icon={user}
+            alt="user"
+            onClick={() => navigate("/myaccount")}
+          />
         </div>
       </nav>
 

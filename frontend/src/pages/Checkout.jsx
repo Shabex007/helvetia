@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useShop } from "../context/ShopContext";
-// import "./styles/Checkout.css";
+import Input from "../components/UI/Input";
 
 const Checkout = () => {
   const { bagItems, clearBag } = useShop();
@@ -57,53 +57,61 @@ const Checkout = () => {
   const total = subtotal - discount + tax;
 
   return (
-    <div className="checkout-wrapper">
-      <h1 className="checkout-title">Checkout</h1>
-      <div className="checkout-content">
-        <div className="checkout-form">
-          <input
+    <div className="max-w-[1330px] bg-[#f6f5f7] flex flex-col items-center p-6">
+      <h1 className="text-3xl font-bold text-center mb-6">Checkout</h1>
+      <div className="w-full max-w-5xl bg-white rounded-lg shadow-md p-6 flex flex-col lg:flex-row gap-6">
+        {/* Form Section */}
+        <div className="flex-1 space-y-4">
+          <Input
+            label="First Name"
             type="text"
             name="firstName"
             placeholder="First Name"
             value={form.firstName}
             onChange={handleInputChange}
           />
-          <input
+          <Input
+            label="Last Name"
             type="text"
             name="lastName"
             placeholder="Last Name"
             value={form.lastName}
             onChange={handleInputChange}
           />
-          <input
+          <Input
+            label="Phone Number"
             type="text"
             name="phone"
             placeholder="Phone Number"
             value={form.phone}
             onChange={handleInputChange}
           />
-          <input
+          <Input
+            label="Email"
             type="email"
             name="email"
             placeholder="Email"
             value={form.email}
             onChange={handleInputChange}
           />
-          <input
+          <Input
+            label="Street Address"
             type="text"
             name="street"
             placeholder="Street Address"
             value={form.street}
             onChange={handleInputChange}
           />
-          <input
+          <Input
+            label="City"
             type="text"
             name="city"
             placeholder="City"
             value={form.city}
             onChange={handleInputChange}
           />
-          <input
+          <Input
+            label="Country"
             type="text"
             name="country"
             placeholder="Country"
@@ -111,49 +119,67 @@ const Checkout = () => {
             onChange={handleInputChange}
           />
 
-          <label>Payment Option:</label>
-          <select
-            name="payment"
-            value={form.payment}
-            onChange={handleInputChange}
-          >
-            <option value="COD">Cash on Delivery</option>
-            <option value="Online">Online Payment</option>
-          </select>
-
-          <div className="promo-section">
-            <input
-              type="text"
-              name="promoCode"
-              placeholder="Promo Code"
-              value={form.promoCode}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Payment Option:
+            </label>
+            <select
+              name="payment"
+              value={form.payment}
               onChange={handleInputChange}
-            />
-            <button type="button" onClick={applyPromo}>
-              Apply
-            </button>
+              className="w-full bg-[#eee] py-3 px-4 rounded focus:outline-none focus:ring-2 focus:ring-[#ff416c] focus:bg-white"
+            >
+              <option value="COD">Cash on Delivery</option>
+              <option value="Online">Online Payment</option>
+            </select>
           </div>
 
-          <button className="place-order-btn" onClick={handlePlaceOrder}>
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Promo Code:
+            </label>
+            <div className="flex items-center gap-4">
+              <Input
+                type="text"
+                name="promoCode"
+                placeholder="Promo Code"
+                value={form.promoCode}
+                onChange={handleInputChange}
+              />
+              <button
+                type="button"
+                onClick={applyPromo}
+                className="rounded-full border border-[#ff4b2b] bg-[#ff4b2b] text-white text-xs font-bold py-3 px-6 tracking-wider uppercase transition hover:bg-[#ff3a1a] active:scale-95"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+
+          <button
+            className="rounded-full border border-[#ff4b2b] bg-[#ff4b2b] text-white text-xs font-bold py-3 px-10 tracking-wider uppercase mt-4 transition hover:bg-[#ff3a1a] active:scale-95"
+            onClick={handlePlaceOrder}
+          >
             {form.payment === "Online" ? "Pay Now" : "Place Order"}
           </button>
         </div>
 
-        <div className="checkout-summary">
-          <h2>Order Summary</h2>
-          <div className="summary-row">
+        {/* Summary Section */}
+        <div className="w-full lg:w-[300px] bg-[#f9f9f9] p-4 rounded-lg shadow-sm">
+          <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+          <div className="flex justify-between py-2 border-b">
             <span>Subtotal:</span>
             <span>${subtotal.toLocaleString()}</span>
           </div>
-          <div className="summary-row">
+          <div className="flex justify-between py-2 border-b">
             <span>Discount:</span>
             <span>${discount.toLocaleString()}</span>
           </div>
-          <div className="summary-row">
+          <div className="flex justify-between py-2 border-b">
             <span>Tax (18%):</span>
             <span>${tax.toLocaleString()}</span>
           </div>
-          <div className="summary-row total">
+          <div className="flex justify-between py-2 font-bold text-lg">
             <span>Total:</span>
             <span>${total.toLocaleString()}</span>
           </div>
