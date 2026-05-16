@@ -1,0 +1,97 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Django
+*.log
+*.pot
+*.pyc
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+static/
+.DS_Store
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.ropeproject
+.project
+.pydevproject
+
+# Testing
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+.mypy_cache/
+.django_storage/
+
+# Uploads
+uploads/
+media/
+
+# Secrets
+*.pem
+*.key
+*.crt
+secret_key.txt
+
+# Logs
+logs/
+*.log
+
+# Package management
+pip-log.txt
+pip-delete-this-directory.txt
+pip-selfcheck.json
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# MongoDB
+dump/
+mongodump/
+
+# Sentry
+.sentry/
+
+# Cloudinary
+cloudinary.json
+
+# Stripe
+stripe_webhook_secret.txt
+
+# Temporary files
+*.tmp
+*.temp
+test_*.py
+check_*.py
+verify_*.py
+create_*.py
+
+# OS specific
+Thumbs.db
+Desktop.ini
