@@ -1,11 +1,14 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.permissions import IsAdminUser
 from .services import AnalyticsService
 from .serializers import DashboardStatsSerializer, OrderListSerializer, TopProductSerializer, SalesChartSerializer
 from apps.orders.models import Order
 from apps.users.models import User
-from apps.products.models import Product
+from apps.products.models import Product, Category
+from apps.products.serializers import ProductSerializer
+from apps.products.image_utils import save_base64_image, delete_product_images
 
 
 class AdminDashboardView(APIView):
@@ -194,28 +197,55 @@ class AdminLowStockView(APIView):
             'products': serializer.data,
             'count': low_stock_products.count()
         })
+
+
 class AdminProductCreateView(APIView):
     permission_classes = [IsAdminUser]
     
     def post(self, request):
-        from apps.products.models import Product, Category
+        data = request.data.copy()
+        
+        # First create product without images to get ID
+        product = Product()
+        
+        # Set basic fields
+        for key, value in data.items():
+            if key not in ['images', 'thumbnail', 'categories']:
+                setattr(product, key, value)
+        
+        product.save()
+        
+        # Handle categories
+        if 'categories' in data:
+            category_ids = data['categories']
+            categories = Category.objects(id__in=category_ids)
+            product.categories = list(categories)
+        
+        # Handle images with product ID
+        images = data.get('images', [])
+        processed_images = []
+        
+        for i, img in enumerate(images):
+            if img and not img.startswith('/media/'):
+                # Save to product-specific folder
+                saved_path = save_base64_image(img, str(product.id), 'products', is_thumbnail=(i == 0))
+                if saved_path:
+                    processed_images.append(saved_path)
+            else:
+                processed_images.append(img)
+        
+        # Handle thumbnail
+        thumbnail = data.get('thumbnail')
+        if thumbnail and not thumbnail.startswith('/media/'):
+            thumbnail = save_base64_image(thumbnail, str(product.id), 'products', is_thumbnail=True)
+        
+        # Update product with image paths
+        product.images = processed_images
+        product.thumbnail = thumbnail or (processed_images[0] if processed_images else None)
+        product.save()
+        
         from apps.products.serializers import ProductSerializer
-        
-        serializer = ProductSerializer(data=request.data)
-        if serializer.is_valid():
-            product = Product(**serializer.validated_data)
-            product.save()
-            
-            # Handle categories
-            if 'categories' in serializer.validated_data:
-                category_ids = serializer.validated_data['categories']
-                categories = Category.objects(id__in=category_ids)
-                product.categories = list(categories)
-                product.save()
-            
-            return Response(ProductSerializer(product).data, status=201)
-        
-        return Response(serializer.errors, status=400)
+        return Response(ProductSerializer(product).data, status=201)
 
 
 class AdminProductUpdateView(APIView):
@@ -224,26 +254,48 @@ class AdminProductUpdateView(APIView):
     def put(self, request, product_id):
         from apps.products.models import Product, Category
         from apps.products.serializers import ProductSerializer
+        from apps.products.image_utils import save_base64_image
         
         try:
             product = Product.objects.get(id=product_id)
-            serializer = ProductSerializer(product, data=request.data, partial=True)
             
-            if serializer.is_valid():
-                for key, value in serializer.validated_data.items():
-                    if key != 'categories':
-                        setattr(product, key, value)
-                
-                # Handle categories
-                if 'categories' in serializer.validated_data:
-                    category_ids = serializer.validated_data['categories']
-                    categories = Category.objects(id__in=category_ids)
-                    product.categories = list(categories)
-                
-                product.save()
-                return Response(ProductSerializer(product).data)
+            data = request.data.copy()
             
-            return Response(serializer.errors, status=400)
+            # Handle categories
+            if 'categories' in data:
+                category_ids = data['categories']
+                categories = Category.objects(id__in=category_ids)
+                product.categories = list(categories)
+            
+            # Handle images
+            if 'images' in data:
+                images = data.get('images', [])
+                processed_images = []
+                
+                for i, img in enumerate(images):
+                    if img and not img.startswith('/media/'):
+                        saved_path = save_base64_image(img, product_id, 'products', is_thumbnail=(i == 0))
+                        if saved_path:
+                            processed_images.append(saved_path)
+                    else:
+                        processed_images.append(img)
+                product.images = processed_images
+            
+            # Handle thumbnail
+            if 'thumbnail' in data:
+                thumbnail = data.get('thumbnail')
+                if thumbnail and not thumbnail.startswith('/media/'):
+                    thumbnail = save_base64_image(thumbnail, product_id, 'products', is_thumbnail=True)
+                product.thumbnail = thumbnail
+            
+            # Update other fields
+            exclude_fields = ['images', 'thumbnail', 'categories']
+            for key, value in data.items():
+                if key not in exclude_fields and hasattr(product, key):
+                    setattr(product, key, value)
+            
+            product.save()
+            return Response(ProductSerializer(product).data)
             
         except Product.DoesNotExist:
             return Response({'error': 'Product not found'}, status=404)
@@ -254,10 +306,15 @@ class AdminProductDeleteView(APIView):
     
     def delete(self, request, product_id):
         from apps.products.models import Product
+        from apps.products.image_utils import delete_product_images
         
         try:
             product = Product.objects.get(id=product_id)
+            
+            # Delete product images folder
+            delete_product_images(product_id, 'products')
+            
             product.delete()
-            return Response({'message': 'Product deleted successfully'})
+            return Response({'message': 'Product and images deleted successfully'})
         except Product.DoesNotExist:
             return Response({'error': 'Product not found'}, status=404)
