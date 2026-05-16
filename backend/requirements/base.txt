@@ -9,6 +9,7 @@ mongoengine==0.29.1
 
 # Authentication
 djangorestframework-simplejwt==5.3.1
+pyjwt==2.12.1
 
 # Utilities
 pillow==10.4.0
@@ -16,19 +17,22 @@ django-filter==24.3
 django-ratelimit==4.1.0
 drf-spectacular==0.27.2
 
-# Payments
+# Payments (for Phase 3)
 stripe==10.7.0
 razorpay==1.4.2
 
-# Cloud Storage
+# Cloud Storage (for Phase 3)
 cloudinary==1.37.0
 
-# Async Tasks
+# Async Tasks (for Phase 3)
 celery==5.4.0
 redis==5.2.0
 
-# Email
+# Email (for Phase 3)
 sendgrid==6.11.0
 
-# Monitoring
+# Monitoring (for Phase 3)
 sentry-sdk==2.14.0
+
+# HTTP Client (for testing)
+requests==2.32.3

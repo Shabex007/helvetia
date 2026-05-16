@@ -1,2 +1,8 @@
 -r base.txt
+
+# Production Server
 gunicorn==23.0.0
+
+# Production Optimizations
+django-storages==1.14.4
+boto3==1.35.0

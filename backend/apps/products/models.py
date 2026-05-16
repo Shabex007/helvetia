@@ -34,12 +34,12 @@ class Product(Document):
     
     # Pricing
     price = FloatField(required=True, min_value=0)
-    compare_price = FloatField(min_value=0)  # Original price for discount display
-    cost_price = FloatField(min_value=0)  # Admin only
+    compare_price = FloatField(min_value=0)
+    cost_price = FloatField(min_value=0)
     
     # Description
     description = StringField()
-    specifications = DictField()  # JSON field for specs like movement, case material, etc.
+    specifications = DictField()
     
     # Media
     images = ListField(StringField())
@@ -95,7 +95,7 @@ class Product(Document):
             'price',
             ('brand', 'price'),
             ('is_active', 'created_at'),
-            {'fields': ['name', 'description'], 'type': 'text'}
+            # Text index removed due to Atlas free tier limitation
         ]
     }
     
