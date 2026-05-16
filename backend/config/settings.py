@@ -45,7 +45,9 @@ ROOT_URLCONF = 'config.urls'
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # MongoDB Connection
-MONGODB_URI = os.getenv('MONGODB_URI', 'mongodb+srv://Shabex007:Shabaaz%40007@cluster0.ocjhpj9.mongodb.net/helvetia?retryWrites=true&w=majority&appName=Cluster0')
+MONGODB_URI = os.getenv('MONGODB_URI')
+if not MONGODB_URI:
+    raise ValueError("MONGODB_URI environment variable not set!")
 
 import mongoengine
 mongoengine.connect(host=MONGODB_URI, alias='default')
