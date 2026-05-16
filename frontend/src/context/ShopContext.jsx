@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import products from "../data/products";
+import apiService from "../services/apiService";
+import { useAuth } from "./AuthContext";
 
 // Create context
 const ShopContext = createContext();
@@ -9,75 +10,134 @@ export const useShop = () => useContext(ShopContext);
 
 // Provider
 export const ShopProvider = ({ children }) => {
-  // Bag state
   const [bagItems, setBagItems] = useState([]);
-
-  const addToBag = (product, quantity = 1) => {
-    setBagItems((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
-      if (existing) {
-        return prev.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
-        );
-      }
-      return [...prev, { ...product, quantity }];
-    });
-  };
-
-  const updateBagQuantity = (productId, quantity) => {
-    setBagItems((prev) =>
-      prev.map((item) => (item.id === productId ? { ...item, quantity } : item))
-    );
-  };
-
-  const removeFromBag = (productId) => {
-    setBagItems((prev) => prev.filter((item) => item.id !== productId));
-  };
-
-  const clearBag = () => setBagItems([]);
-
-  // Wishlist state
   const [wishlistItems, setWishlistItems] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
+  const { isAuthenticated } = useAuth();
 
-  const addToWishlist = (product) => {
-    if (!wishlistItems.find((item) => item.id === product.id)) {
-      setWishlistItems((prev) => [...prev, { ...product, quantity: 1 }]);
+  // Load cart and wishlist from backend when authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadUserData();
+    } else {
+      setBagItems([]);
+      setWishlistItems([]);
+      setLoading(false);
+    }
+  }, [isAuthenticated]);
+
+  const loadUserData = async () => {
+    if (!isAuthenticated) return;
+
+    try {
+      const cartData = await apiService.getCart();
+      setBagItems(cartData.items || []);
+      const wishlistData = await apiService.getWishlist();
+      setWishlistItems(wishlistData.items || []);
+    } catch (error) {
+      console.error("Error loading user data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const updateWishlistQuantity = (productId, quantity) => {
-    setWishlistItems((prev) =>
-      prev.map((item) => (item.id === productId ? { ...item, quantity } : item))
-    );
+  // Bag actions
+  const addToBag = async (product, quantity = 1) => {
+    if (!isAuthenticated) {
+      window.location.href = "/auth";
+      return;
+    }
+
+    try {
+      await apiService.addToCart(product.id, quantity);
+      await loadUserData();
+    } catch (error) {
+      console.error("Error adding to bag:", error);
+    }
   };
 
-  const removeFromWishlist = (productId) => {
-    setWishlistItems((prev) => prev.filter((item) => item.id !== productId));
+  const updateBagQuantity = async (productId, quantity) => {
+    if (!isAuthenticated) return;
+
+    try {
+      await apiService.updateCartItem(productId, quantity);
+      await loadUserData();
+    } catch (error) {
+      console.error("Error updating quantity:", error);
+    }
   };
 
-  // ✅ Search state
-  const [searchQuery, setSearchQuery] = useState("");
+  const removeFromBag = async (productId) => {
+    if (!isAuthenticated) return;
 
-  // Return context value
+    try {
+      await apiService.removeFromCart(productId);
+      await loadUserData();
+    } catch (error) {
+      console.error("Error removing from bag:", error);
+    }
+  };
+
+  const clearBag = async () => {
+    if (!isAuthenticated) return;
+
+    try {
+      for (const item of bagItems) {
+        await apiService.removeFromCart(item.product.id);
+      }
+      setBagItems([]);
+    } catch (error) {
+      console.error("Error clearing bag:", error);
+    }
+  };
+
+  // Wishlist actions
+  const addToWishlist = async (product) => {
+    if (!isAuthenticated) {
+      window.location.href = "/auth";
+      return;
+    }
+
+    try {
+      await apiService.addToWishlist(product.id);
+      await loadUserData();
+    } catch (error) {
+      console.error("Error adding to wishlist:", error);
+    }
+  };
+
+  const removeFromWishlist = async (productId) => {
+    if (!isAuthenticated) return;
+
+    try {
+      await apiService.removeFromWishlist(productId);
+      await loadUserData();
+    } catch (error) {
+      console.error("Error removing from wishlist:", error);
+    }
+  };
+
+  const isInWishlist = (productId) => {
+    return wishlistItems.some((item) => item.product?.id === productId);
+  };
+
   return (
     <ShopContext.Provider
       value={{
-        // Bag
         bagItems,
+        wishlistItems,
+        searchQuery,
+        setSearchQuery,
         addToBag,
         updateBagQuantity,
         removeFromBag,
         clearBag,
-        // Wishlist
-        wishlistItems,
         addToWishlist,
-        updateWishlistQuantity,
         removeFromWishlist,
-        // ✅ Search
-        searchQuery,
-        setSearchQuery,
+        isInWishlist,
+        loading,
+        refreshUserData: loadUserData,
       }}
     >
       {children}

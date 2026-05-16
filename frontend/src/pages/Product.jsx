@@ -1,16 +1,15 @@
-// src/pages/WatchDetails.jsx
 import React from "react";
 import { useParams } from "react-router-dom";
-import products from "../data/products";
 import ProductDetails from "../components/Product/ProductDetails";
 
 const WatchDetails = () => {
-  const { id } = useParams();
-  const product = products.find((p) => p.id === parseInt(id));
+  const { slug } = useParams(); // Change from 'id' to 'slug'
 
-  if (!product) return <div>Product not found</div>;
+  if (!slug) {
+    return <div className="text-center py-10">Invalid product ID</div>;
+  }
 
-  return <ProductDetails product={product} />;
+  return <ProductDetails slug={slug} />;
 };
 
 export default WatchDetails;

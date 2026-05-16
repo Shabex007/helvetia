@@ -4,7 +4,17 @@ import WishlistCard from "../UI/WishlistCard";
 import Button from "../UI/Button";
 
 const WishlistGrid = () => {
-  const { wishlistItems } = useShop();
+  const { wishlistItems, loading } = useShop();
+
+  if (loading) {
+    return (
+      <section className="w-full flex flex-col justify-start items-center gap-[40px] py-[40px]">
+        <h2 className="text-center text-lg font-medium">
+          Loading your wishlist...
+        </h2>
+      </section>
+    );
+  }
 
   return (
     <section className="w-full flex flex-col justify-start items-center gap-[40px] py-[40px]">

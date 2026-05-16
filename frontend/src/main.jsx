@@ -1,17 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import ScrollToTop from "./components/ScrollToTop/ScrollToTop.jsx";
-import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
+import App from "./App";
 import { ShopProvider } from "./context/ShopContext";
+import { AuthProvider } from "./context/AuthContext";
+import "./index.css";
+import "./App.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
-      <ShopProvider>
-        <ScrollToTop />
-        <App />
-      </ShopProvider>
+      <AuthProvider>
+        <ShopProvider>
+          <App />
+        </ShopProvider>
+      </AuthProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

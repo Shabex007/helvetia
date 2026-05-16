@@ -1,47 +1,85 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useShop } from "../../context/ShopContext";
 import ProductGrid from "./ProductGrid";
 import Button from "../UI/Button";
-import products from "../../data/products";
+import apiService from "../../services/apiService";
 
 const ProductList = () => {
   const { searchQuery } = useShop();
-  const uniqueBrands = [...new Set(products.map((p) => p.brand.toUpperCase()))];
+  const [products, setProducts] = useState([]);
+  const [brands, setBrands] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState("ALL");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Normalize query
-  const normalizedQuery = searchQuery.trim().toLowerCase();
+  // Fetch products and brands from API
+  useEffect(() => {
+    fetchProducts();
+    fetchBrands();
+  }, [searchQuery, selectedBrand]);
 
-  // Filtering logic
-  let filteredProducts = [];
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      let params = {};
 
-  if (normalizedQuery) {
-    filteredProducts = products.filter(
-      (p) =>
-        p.brand.toLowerCase().includes(normalizedQuery) ||
-        p.model.toLowerCase().includes(normalizedQuery)
-    );
-  } else {
-    filteredProducts =
-      selectedBrand === "ALL"
-        ? products
-        : products.filter((p) => p.brand.toUpperCase() === selectedBrand);
+      if (searchQuery) {
+        params.search = searchQuery;
+      } else if (selectedBrand !== "ALL") {
+        params.brand = selectedBrand;
+      }
+
+      const data = await apiService.getProducts(params);
+      setProducts(data.results || []);
+    } catch (err) {
+      setError("Failed to load products");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchBrands = async () => {
+    try {
+      const data = await apiService.getBrands();
+      setBrands(data.map((b) => b.name.toUpperCase()));
+    } catch (err) {
+      console.error("Error fetching brands:", err);
+    }
+  };
+
+  // Group products by brand when no search or filter
+  const groupedProducts = {};
+  if (!searchQuery && selectedBrand === "ALL") {
+    products.forEach((product) => {
+      const brand = product.brand.toUpperCase();
+      if (!groupedProducts[brand]) {
+        groupedProducts[brand] = [];
+      }
+      groupedProducts[brand].push(product);
+    });
   }
 
-  // Grouped by brand
-  const groupedProducts = {};
-  filteredProducts.forEach((product) => {
-    const brand = product.brand.toUpperCase();
-    if (!groupedProducts[brand]) {
-      groupedProducts[brand] = [];
-    }
-    groupedProducts[brand].push(product);
-  });
+  if (loading) {
+    return (
+      <div className="text-center py-10">
+        <p>Loading products...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-10 text-red-500">
+        <p>{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-[1300px] mx-auto px-4 box-border">
       {/* Brand Filter Buttons (hidden when searching) */}
-      {!normalizedQuery && (
+      {!searchQuery && (
         <div className="py-[25px] w-full flex flex-wrap justify-center items-center gap-[20px]">
           <Button
             text="ALL"
@@ -49,7 +87,7 @@ const ProductList = () => {
             onClick={() => setSelectedBrand("ALL")}
             className={selectedBrand === "ALL" ? "bg-[#a20009] text-white" : ""}
           />
-          {uniqueBrands.map((brand) => (
+          {brands.map((brand) => (
             <Button
               key={brand}
               text={brand}
@@ -64,17 +102,17 @@ const ProductList = () => {
       )}
 
       {/* No Results */}
-      {filteredProducts.length === 0 && (
+      {products.length === 0 && (
         <p className="text-center text-[#a20009] font-semibold text-lg mt-10">
           No matching products found.
         </p>
       )}
 
       {/* Product Display */}
-      {normalizedQuery ? (
+      {searchQuery ? (
         <div className="py-[25px] w-full flex flex-col items-center gap-[50px]">
-          <h2>Search Results</h2>
-          <ProductGrid products={filteredProducts} />
+          <h2>Search Results for "{searchQuery}"</h2>
+          <ProductGrid products={products} />
         </div>
       ) : selectedBrand === "ALL" ? (
         Object.entries(groupedProducts).map(([brand, items]) => (
@@ -89,7 +127,7 @@ const ProductList = () => {
       ) : (
         <div className="py-[25px] w-full flex flex-col items-center gap-[50px]">
           <h2>{selectedBrand}</h2>
-          <ProductGrid products={filteredProducts} />
+          <ProductGrid products={products} />
         </div>
       )}
     </div>

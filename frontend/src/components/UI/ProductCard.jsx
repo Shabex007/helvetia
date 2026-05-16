@@ -1,16 +1,19 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useShop } from "../../context/ShopContext";
+import { getImageUrl } from "../../utils/imageHelper";
 import wishlist from "../../assets/wishlist.svg";
 import bag from "../../assets/bag.svg";
 import Button from "../UI/Button";
 
-const ProductCard = ({ id, brand, model, price, image }) => {
+const ProductCard = ({ id, slug, brand, model, price, image }) => {
   const navigate = useNavigate();
-  const { addToBag, addToWishlist } = useShop();
+  const { addToBag, addToWishlist, isInWishlist } = useShop();
+
+  const imageUrl = getImageUrl(image);
 
   const handleAddToBag = () => {
-    const product = { id, brand, model, price, image };
+    const product = { id, slug, brand, model, price, image: imageUrl };
     addToBag(product);
     navigate("/bag");
   };
@@ -28,16 +31,25 @@ const ProductCard = ({ id, brand, model, price, image }) => {
       </div>
 
       <img
-        src={image}
+        src={imageUrl}
         alt={model}
-        onClick={() => navigate(`/product/${id}`)}
+        onClick={() => navigate(`/product/${slug || id}`)}
         className="w-[212px] h-[304px] object-contain cursor-pointer"
+        onError={(e) => {
+          e.target.src = "https://via.placeholder.com/212x304?text=No+Image";
+        }}
       />
 
       <div className="flex justify-end items-center w-full gap-3">
         <button
-          onClick={() => addToWishlist({ id, brand, model, price, image })}
-          className="p-4 rounded-full bg-white outline-1 outline-[#d0d0d0] cursor-pointer hover:bg-[#a20009] hover:text-white transition"
+          onClick={() =>
+            addToWishlist({ id, slug, brand, model, price, image: imageUrl })
+          }
+          className={`p-4 rounded-full outline-1 outline-[#d0d0d0] cursor-pointer transition ${
+            isInWishlist(id)
+              ? "bg-[#a20009] text-white"
+              : "bg-white hover:bg-[#a20009] hover:text-white"
+          }`}
         >
           <img
             src={wishlist}

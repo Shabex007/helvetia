@@ -4,7 +4,17 @@ import BagCard from "../UI/BagCard";
 import Button from "../UI/Button";
 
 const BagDisplay = () => {
-  const { bagItems } = useShop();
+  const { bagItems, loading } = useShop();
+
+  if (loading) {
+    return (
+      <div className="flex flex-col gap-10 flex-1">
+        <h2 className="text-xl font-semibold text-black">
+          Loading your bag...
+        </h2>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-10 flex-1">

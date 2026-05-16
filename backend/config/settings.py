@@ -13,26 +13,31 @@ SECRET_KEY = 'django-insecure-8fjs$92jKl@a89dfkLz09@xY'
 DEBUG = True
 ALLOWED_HOSTS = ['*']
 
-# Minimal apps for API
+# Apps
 INSTALLED_APPS = [
-    'django.contrib.sessions',  # Add this
-    'django.contrib.auth',       # Add this
+    'django.contrib.sessions',
+    'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.messages',   # Add this
+    'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
     'users',
     'products',
+    'cart',
+    'wishlist',
+    'orders',
+    'payments',
+    'analytics',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',  # Add this
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',  # Add this
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 ]
 
@@ -56,5 +61,14 @@ REST_FRAMEWORK = {
     ),
 }
 
+# CORS
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+# Static and Media files
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
