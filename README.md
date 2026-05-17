@@ -1,6 +1,6 @@
 # Helvetia - Luxury Watch E-Commerce Platform ⌚
 
-A full-stack luxury watch e-commerce platform with Django REST API backend and React frontend, featuring JWT authentication, MongoDB database, complete shopping cart, wishlist, order management, and admin analytics dashboard.
+A full-stack luxury watch e-commerce platform with Django REST API backend and React frontend, featuring JWT authentication, MongoDB database, complete shopping cart, wishlist, order management, and a dedicated React Admin Dashboard.
 
 ---
 
@@ -12,12 +12,12 @@ Helvetia is a production-ready e-commerce platform designed for luxury watch ret
 
 ## 🚀 Live Demo
 
-| Service           | URL                                          |
-| ----------------- | -------------------------------------------- |
-| Frontend          | `http://localhost:3000`                      |
-| Backend API       | `http://localhost:8000/api`                  |
-| Admin Dashboard   | `http://localhost:8000/api/admin/dashboard/` |
-| API Documentation | `http://localhost:8000/api/docs/`            |
+| Service           | URL                               |
+| ----------------- | --------------------------------- |
+| Frontend          | `http://localhost:3000`           |
+| Backend API       | `http://localhost:8000/api`       |
+| Admin Dashboard   | `http://localhost:5173 (or 5174)` |
+| API Documentation | `http://localhost:8000/api/docs/` |
 
 ---
 
@@ -26,19 +26,25 @@ Helvetia is a production-ready e-commerce platform designed for luxury watch ret
 ```text
 ┌─────────────────────────────────────────────────────────────┐
 │                     React Frontend                          │
-│  (React 18, Tailwind CSS, Axios, React Router DOM)          │
+│      (React 18, Tailwind CSS, Axios, React Router DOM)      │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                    Django REST API                          │
-│         (Django 6.0, DRF, JWT, CORS)                        │
+│                       Django REST API                       │
+│                 (Django 6.0, DRF, JWT, CORS)                │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                    MongoDB Atlas                            │
+│                       MongoDB Atlas                         │
 │              (Cloud Database with Geo-redundancy)           │
+└─────────────────────────────────────────────────────────────┘
+                              ▲
+                              │
+┌─────────────────────────────────────────────────────────────┐
+│                    Admin Dashboard (React)                  │
+│        (React 18, Tailwind CSS, Axios, React Router DOM)    │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -176,6 +182,16 @@ frontend/
 │   ├── assets/
 │   └── config/
 ├── public/
+└── package.json
+
+admin/                  # Admin dashboard (separate React app)
+├── src/
+│   ├── components/     # Dashboard components
+│   ├── pages/          # Admin pages (Dashboard, Products, Orders, Users)
+│   ├── context/        # Admin context
+│   ├── services/       # API integration
+│   └── App.jsx
+├── .env
 └── package.json
 ```
 
@@ -365,7 +381,22 @@ npm install
 echo "REACT_APP_API_URL=http://localhost:8000/api" > .env
 
 # Start development server
-npm start
+npm run dev
+```
+
+## Admin Dashboard Setup
+
+```bash
+cd ../admin
+
+# Install dependencies
+npm install
+
+# Create .env file
+echo "VITE_API_URL=http://localhost:8000/api" > .env
+
+# Start development server
+npm run dev
 ```
 
 ---
