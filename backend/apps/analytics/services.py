@@ -4,6 +4,7 @@ from apps.orders.models import Order
 from apps.users.models import User
 from .models import SalesAnalytics, DailyStats
 
+
 class AnalyticsService:
     
     @staticmethod
@@ -145,12 +146,30 @@ class AnalyticsService:
     
     @staticmethod
     def _format_order(order):
+        """Format order with product images"""
+        # Format items with images
+        formatted_items = []
+        for item in order.items:
+            formatted_items.append({
+                'product_id': item.get('product_id'),
+                'product_name': item.get('product_name'),
+                'product_price': item.get('product_price'),
+                'product_thumbnail': item.get('product_thumbnail'),      # ADDED
+                'product_images': item.get('product_images', []),        # ADDED
+                'quantity': item.get('quantity'),
+                'subtotal': item.get('subtotal')
+            })
+        
         return {
             'id': str(order.id),
             'order_number': order.order_number,
+            'customer_name': order.shipping_address.get('name', 'Guest') if order.shipping_address else 'Guest',
             'total': order.total,
             'order_status': order.order_status,
             'payment_status': order.payment_status,
+            'payment_method': order.payment_method,
+            'items': formatted_items,                                    # Now includes images
+            'shipping_address': order.shipping_address,
             'created_at': order.created_at.isoformat() if order.created_at else None,
             'items_count': len(order.items)
         }

@@ -6,10 +6,9 @@ import {
   ShoppingCart,
   Users,
   BarChart3,
-  Settings,
   LogOut,
-  Watch,
 } from "lucide-react";
+import logo from "../../assets/logo.svg";
 
 const Sidebar = ({ onLogout }) => {
   const navItems = [
@@ -18,18 +17,13 @@ const Sidebar = ({ onLogout }) => {
     { path: "/admin/orders", icon: ShoppingCart, label: "Orders" },
     { path: "/admin/users", icon: Users, label: "Users" },
     { path: "/admin/analytics", icon: BarChart3, label: "Analytics" },
-    { path: "/admin/settings", icon: Settings, label: "Settings" },
   ];
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-72 bg-gradient-to-b from-secondary to-dark text-white shadow-xl z-20">
+    <aside className="fixed left-0 top-0 h-full w-72 bg-[#1a1a2e] text-white shadow-xl z-20">
       {/* Logo */}
-      <div className="flex items-center justify-center gap-3 py-8 border-b border-white/10">
-        <Watch className="w-8 h-8 text-primary" />
-        <div>
-          <h1 className="text-xl font-bold">Helvetia</h1>
-          <p className="text-xs text-gray-400">Admin Panel</p>
-        </div>
+      <div className="flex items-center justify-center py-8 border-b border-white/10">
+        <img src={logo} alt="Helvetia Logo" className="h-8 cursor-pointer" />
       </div>
 
       {/* Navigation */}

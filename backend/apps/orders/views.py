@@ -27,7 +27,7 @@ class CreateOrderView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        # Calculate order totals
+        # Calculate order totals and prepare items WITH IMAGES
         subtotal = 0
         items = []
         for cart_item in cart_items:
@@ -38,6 +38,8 @@ class CreateOrderView(APIView):
                 'product_id': str(product.id),
                 'product_name': product.name,
                 'product_price': product.price,
+                'product_thumbnail': product.thumbnail,      # ADDED: Product thumbnail
+                'product_images': product.images,            # ADDED: All product images
                 'quantity': cart_item.quantity,
                 'subtotal': item_subtotal
             })

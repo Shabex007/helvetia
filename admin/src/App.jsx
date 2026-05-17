@@ -8,6 +8,7 @@ import Products from "./pages/Products";
 import Orders from "./pages/Orders";
 import Users from "./pages/Users";
 import Analytics from "./pages/Analytics";
+import { Toaster } from "react-hot-toast";
 
 const ProtectedRoute = ({ children }) => {
   const { admin, loading } = useAdmin();
@@ -43,6 +44,7 @@ function App() {
   return (
     <BrowserRouter>
       <AdminProvider>
+        <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
         <AppRoutes />
       </AdminProvider>
     </BrowserRouter>
