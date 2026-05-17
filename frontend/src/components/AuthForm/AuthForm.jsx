@@ -100,12 +100,16 @@ const AuthForm = () => {
       setRegisterLastName("");
       setRegisterPhone("");
     } catch (err) {
+      console.error("Registration error:", err);
       const errorMsg =
         err.response?.data?.error ||
         err.response?.data?.message ||
         "Registration failed. Please try again.";
+
       if (typeof errorMsg === "object") {
-        setError(JSON.stringify(errorMsg));
+        // Handle validation errors
+        const errors = Object.values(errorMsg).flat();
+        setError(errors.join(", "));
       } else {
         setError(errorMsg);
       }
@@ -155,7 +159,7 @@ const AuthForm = () => {
 
             <Input
               type="text"
-              name="firstName"
+              name="first_name"
               placeholder="First Name"
               value={registerFirstName}
               onChange={(e) => setRegisterFirstName(e.target.value)}
@@ -163,7 +167,7 @@ const AuthForm = () => {
             />
             <Input
               type="text"
-              name="lastName"
+              name="last_name"
               placeholder="Last Name"
               value={registerLastName}
               onChange={(e) => setRegisterLastName(e.target.value)}
@@ -194,7 +198,7 @@ const AuthForm = () => {
             />
             <Input
               type="password"
-              name="confirmPassword"
+              name="password_confirm"
               placeholder="Confirm Password"
               value={registerConfirmPassword}
               onChange={(e) => setRegisterConfirmPassword(e.target.value)}
